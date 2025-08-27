@@ -2,6 +2,6 @@
 
 int main ()
 {
-	Game game;
+	ServeGame game;
 	game.Init();
 }

@@ -3,17 +3,17 @@
 
 #include "string"
 
-class Game{
+class ServeGame{
 public:
 
 	void Init() 
 	{
-		SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
+		SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE);
 
 		InitWindow(m_ScreenSize.x, m_ScreenSize.y, "Serve");
-
+		
 		m_BallVelocity = { (float)GetRandomValue(1,1), (float)GetRandomValue(-1,1) };
-
+		
 		while (!WindowShouldClose())
 		{
 			GameLoop();
@@ -26,6 +26,13 @@ private:
 
 	void GameLoop() 
 	{
+		if (IsWindowResized()) {
+
+			m_ScreenSize = { (float)GetScreenWidth(), (float)GetScreenHeight() };
+			
+			m_PlayerPos.x = m_ScreenSize.x - 50;
+		}
+
 		BeginDrawing();
 
 		ClearBackground(DARKGREEN);
@@ -51,8 +58,7 @@ private:
 			m_EnemyPos.y -= m_EnemyMoveSpeed * GetFrameTime();
 		}
 
-		DrawRectangle(m_EnemyPos.x, m_EnemyPos.y, m_PlayerSize.x, m_PlayerSize.y, WHITE);
-		
+		DrawRectangle(m_EnemyPos.x, m_EnemyPos.y, m_PlayerSize.x, m_PlayerSize.y, WHITE);	
 	}
 
 	void DrawBall() 
@@ -105,7 +111,6 @@ private:
 
 	void DrawPlayer() 
 	{
-
 		DrawRectangle(m_PlayerPos.x, m_PlayerPos.y, m_PlayerSize.x, m_PlayerSize.y, WHITE);
 
 		m_PlayerRect.max = { m_PlayerPos.x - (m_PlayerSize.x / 2), m_PlayerPos.x + (m_PlayerSize.y / 2),0 };
@@ -127,7 +132,6 @@ private:
 	
 	void ResetGame() 
 	{
-
 		m_PlayerPos = { m_ScreenSize.x - 50, m_ScreenSize.y / 2 };
 
 		m_EnemyPos = { 50, m_ScreenSize.y / 2 };
@@ -139,7 +143,7 @@ private:
 
 private:
 
-	const Vector2 m_ScreenSize{ 900,600 };
+	Vector2 m_ScreenSize{ 900,600 };
 
 	Vector2 m_PlayerPos{ m_ScreenSize.x - 50, m_ScreenSize.y / 2 };
 
@@ -160,5 +164,4 @@ private:
 
 	Vector2 m_BallVelocity = {};
 	Vector2 m_BallPos = {m_ScreenSize.x / 2, m_ScreenSize.y / 2 };
-	
 };
