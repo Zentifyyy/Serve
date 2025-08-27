@@ -1,6 +1,5 @@
 #include "raylib.h"
 #include "resource_dir.h"
-#include <iostream>
 
 class Game{
 public:
@@ -11,7 +10,7 @@ public:
 
 		InitWindow(m_ScreenSize.x, m_ScreenSize.y, "Hello Raylib");
 
-		m_BallVelocity = { (float)GetRandomValue(-1,1), (float)GetRandomValue(-1,1)};
+		m_BallVelocity = { (float)GetRandomValue(1,1), (float)GetRandomValue(-1,1)};
 
 		//SearchAndSetResourceDir("resources");
 
@@ -55,8 +54,9 @@ private:
 		if (m_BallPos.y > m_ScreenSize.y - 10 || m_BallPos.y < 0)
 			m_BallVelocity.y = -m_BallVelocity.y;
 
-		if (CheckCollisionBoxSphere(m_PlayerRect, { m_BallPos.x,m_BallPos.y,0 }, 10)) {
-			m_BallVelocity.x = -m_BallVelocity.x;
+		if (m_BallPos.x > m_PlayerPos.x - (m_PlayerSize.x / 2 - 10)) {
+			if (m_BallPos.y > m_PlayerPos.y - (m_PlayerSize.y / 2) && m_BallPos.y < m_PlayerPos.y + (m_PlayerSize.y / 2))
+				m_BallVelocity.x = -m_BallVelocity.x;
 		}
 
 		DrawCircle(m_BallPos.x, m_BallPos.y, 10, WHITE);
@@ -82,7 +82,6 @@ private:
 		DrawRectangle(m_PlayerPos.x, m_PlayerPos.y, m_PlayerSize.x, m_PlayerSize.y, WHITE);
 	
 		DrawBoundingBox(m_PlayerRect, BLUE);
-	
 	}
 
 private:
@@ -94,7 +93,7 @@ private:
 	Vector2 m_EnemyPos{ 50, m_ScreenSize.y / 2 };
 
 	const int m_PlayerMoveSpeed = 10;
-	const int m_BallMoveSpeed = 10;
+	const int m_BallMoveSpeed = 2;
 
 	const Vector2 m_PlayerSize = { 25,75 };
 	
